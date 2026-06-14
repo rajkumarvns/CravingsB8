@@ -31,9 +31,13 @@ const Login = () => {
 
   return (
     <>
-      <div className="h-[90vh] bg-linear-to-r from-(--secondary) to-(--primary) grid grid-cols-2 p-10 ">
-        <div className="hidden md:block">
-          <img src={deliveryboy} alt="" className="rotate-y-180" />
+
+      <div className="h-[92vh] bg-linear-to-r from-(--secondary) to-(--primary) grid grid-cols-2 p-10 ">
+        <div>
+          <img src={"foodTable.webp"} alt="food Table" className="w-full" />
+          <div className="hidden md:block  ms-31 me-20">
+          <img src={deliveryboy} alt="" className="rotate-y-180  rounded-3xl bg-blue-200" />
+        </div>
         </div>
         <div className="w-md bg-(--background) rounded shadow p-10 flex flex-col justify-center">
           <div>Welocome Back!</div>
@@ -70,8 +74,11 @@ const Login = () => {
           </form>
         </div>
       </div>
+
     </>
   );
 };
 
 export default Login;
+
+

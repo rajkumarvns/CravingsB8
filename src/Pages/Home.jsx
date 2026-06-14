@@ -1,9 +1,10 @@
-import React from "react";
-const Home = () => {
+import React from 'react'
+
+export const Home = () => {
   return (
     <>
-      {/* <div className="bg-(--secondary)">Home</div> */}
+    <div>Home</div>
     </>
   );
-};
+}
 export default Home;
