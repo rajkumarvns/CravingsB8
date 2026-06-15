@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import deliveryboy from "../assets/deliveryboy.avif";
-import foodImg from "../assets/foodTable.webp";
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -22,8 +21,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here, e.g., send loginData to the server
-    //Validate loginData
 
     console.log("Register data submitted:", registerData);
 
@@ -35,10 +32,7 @@ const Register = () => {
 
   return (
     <>
-      <div
-        className="h-fit bg-cover bg-center"
-        style={{ backgroundImage: `url(${foodImg})` }}
-      >
+      <div className="h-fit bg-cover bg-center bg-[url('/foodTable.webp')]">
         <div className="h-[92vh] grid grid-cols-1 md:grid-cols-2 p-10 items-start">
           <div className="flex justify-center md:justify-start items-start mt-6 md:mt-0">
             <img
@@ -58,15 +52,26 @@ const Register = () => {
             <div>
               <span>Register as:</span>
               <div className="flex gap-2 mt-2">
-                <input type="radio" />
+                <input
+                  type="radio"
+                  name="registerAs"
+                  value="customer"
+                  id="customer"
+                />
+
                 <label htmlFor="customer" className="mr-10">
                   Customer
                 </label>
-                <input type="radio" />
+                <input
+                  type="radio"
+                  id="restaurant"
+                  value="restaurant"
+                  name="registerAs"
+                />
                 <label htmlFor="restaurant" className="mr-10">
                   Restaurant
                 </label>
-                <input type="radio" />
+                <input type="radio" id="rider" name="rider" name="registerAs" />
                 <label htmlFor="rider">Rider</label>
               </div>
             </div>
@@ -149,9 +154,11 @@ const Register = () => {
               </button>
               <div className="my-4 flex justify-center">
                 <span>Already registered?</span>
-                <a href="./login"><span className="text-(--accent) hover:underline ml-1">
-                  Login here
-                </span></a>
+                <a href="./login">
+                  <span className="text-(--accent) hover:underline ml-1">
+                    Login here
+                  </span>
+                </a>
               </div>
             </form>
           </div>
