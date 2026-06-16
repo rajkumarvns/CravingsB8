@@ -18,7 +18,6 @@ const Register = () => {
 
     setRegisterData((prevData) => ({ ...prevData, [name]: value }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

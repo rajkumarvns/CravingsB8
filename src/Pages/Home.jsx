@@ -3,7 +3,7 @@ import React from "react";
 export const Home = () => {
   return (
     <>
-      <div>Home</div>
+      <div className="font-bold text-(--accent)">Home</div>
     </>
   );
 };
