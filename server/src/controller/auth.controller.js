@@ -3,14 +3,15 @@ import bcrypt from "bcrypt";
 
 export const RegisterUser = async (req, res, next) => {
   try {
-    const fullName = req.body.fullName || req.body.fullname;
-    const { email, password, phone, gender, dob } = req.body;
+    const { fullName, email, password, phone, gender, dob } = req.body;
 
     if (!fullName || !email || !password || !phone || !gender || !dob) {
       const error = new Error("All fields Required");
       error.statusCode = 400;
       return next(error);
     }
+
+    // console.log(req.body);
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -24,7 +25,9 @@ export const RegisterUser = async (req, res, next) => {
     const SALT = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, SALT);
 
-    await User.create({
+    // console.log("addnig user now");
+
+    const newUser = await User.create({
       fullName,
       email,
       password: hashedPassword,
@@ -34,10 +37,12 @@ export const RegisterUser = async (req, res, next) => {
       photo,
     });
 
+    // console.log(newUser);
+
     res.status(201).json({ message: "User Created Successfully" });
   } catch (error) {
     console.log(error.message);
-    next(error);
+    next();
   }
 };
 
@@ -71,15 +76,15 @@ export const LoginUser = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error.message);
-    next(error);
+    next();
   }
 };
 
 export const LogoutUser = async (req, res, next) => {
   try {
-    res.status(200).json({ message: "Logged out successfully" });
+    // Controller Logic
   } catch (error) {
     console.log(error.message);
-    next(error);
+    next();
   }
 };

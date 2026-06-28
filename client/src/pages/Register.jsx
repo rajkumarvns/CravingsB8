@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../config/api.config";
+import api from "../config/api.config.js";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -61,18 +61,9 @@ const Register = () => {
       const res = await api.post("/auth/register", payload);
 
       alert(res.data.message);
-
-      // Optional
-      navigate("/login");
     } catch (error) {
-      console.log(
-        error?.response?.data?.message || error.message
-      );
-
-      setValidateError(
-        error?.response?.data?.message ||
-          "Something went wrong."
-      );
+        console.log(error.message);
+        
     }
   };
 

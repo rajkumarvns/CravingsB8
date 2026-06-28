@@ -2,8 +2,7 @@ import Contact from "../models/contact.model.js";
 
 export const ContactUsForm = async (req, res, next) => {
   try {
-    const fullName = req.body.fullName || req.body.fullname;
-    const { email, phone, subject, message } = req.body;
+    const { fullName,email,phone,subject,message} = req.body;
 
     if (!fullName || !email || !phone || !subject || !message) {
       const error = new Error("All fields Required");
@@ -11,7 +10,7 @@ export const ContactUsForm = async (req, res, next) => {
       return next(error);
     }
 
-    await Contact.create({
+    const newContactMessage =  await Contact.create({
       fullName,
       email,
       phone,
@@ -20,10 +19,10 @@ export const ContactUsForm = async (req, res, next) => {
     });
 
     res.status(201).json({
-      message: "Thanks for Contacting us! You will hear back from us soon",
+      message: "Thanks for Contacting us!",
     });
   } catch (error) {
     console.log(error.message);
-    next(error);
+    next();
   }
 };
