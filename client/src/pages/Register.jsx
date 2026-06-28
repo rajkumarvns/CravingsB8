@@ -1,32 +1,79 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../config/api.config";
+
 const Register = () => {
+  const navigate = useNavigate();
+
   const [registerData, setRegisterData] = useState({
     fullname: "",
     email: "",
     phone: "",
+    gender: "",
+    dob: "",
     password: "",
     confirmPassword: "",
-    accountType: "customer",
   });
 
+  const [validateError, setValidateError] = useState("");
+
+  // Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setRegisterData((prevData) => ({ ...prevData, [name]: value }));
+
+    setRegisterData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    if (validateError) {
+      setValidateError("");
+    }
   };
 
+  // Handle Form Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Register data submitted:", registerData);
+    // Password Validation
+    if (registerData.password !== registerData.confirmPassword) {
+      setValidateError("Passwords do not match.");
+      return;
+    }
 
+    setValidateError("");
+
+    console.log("Register Data :", registerData);
+
+    // Payload
     const payload = {
-      fullname: registerData.fullname.trim(),
+      fullName: registerData.fullname.trim(),
       email: registerData.email.toLowerCase(),
+      phone: registerData.phone.trim(),
+      gender: registerData.gender,
+      dob: registerData.dob,
       password: registerData.password,
-      accountType: registerData.accountType,
     };
 
-    console.log("Payload:", payload);
+    console.log("Payload :", payload);
+
+    try {
+      const res = await api.post("/auth/register", payload);
+
+      alert(res.data.message);
+
+      // Optional
+      navigate("/login");
+    } catch (error) {
+      console.log(
+        error?.response?.data?.message || error.message
+      );
+
+      setValidateError(
+        error?.response?.data?.message ||
+          "Something went wrong."
+      );
+    }
   };
 
   return (
@@ -38,6 +85,7 @@ const Register = () => {
               <div className="mb-3 inline-flex rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-600">
                 Join Cravings
               </div>
+
               <h2 className="text-3xl font-black text-(--accent)">
                 Create Account
               </h2>
@@ -75,6 +123,25 @@ const Register = () => {
               />
 
               <input
+                type="text"
+                id="gender"
+                name="gender"
+                value={registerData.gender}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                placeholder="Enter your gender"
+              />
+
+              <input
+                type="date"
+                id="dob"
+                name="dob"
+                value={registerData.dob}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              />
+
+              <input
                 type="password"
                 id="password"
                 name="password"
@@ -94,12 +161,20 @@ const Register = () => {
                 placeholder="Confirm your password"
               />
 
+              {/* Validation Error */}
+              {validateError && (
+                <p className="text-sm text-red-500">
+                  {validateError}
+                </p>
+              )}
+
               <div className="flex items-center text-sm text-gray-600">
                 <input
                   type="checkbox"
                   id="terms"
                   className="h-4 w-4 rounded border-gray-300"
                 />
+
                 <label htmlFor="terms" className="ml-2">
                   I agree to the
                   <span className="ml-1 font-semibold text-orange-500 hover:underline">
@@ -117,12 +192,14 @@ const Register = () => {
 
               <div className="pt-2 text-center text-sm text-gray-600">
                 <span>Already registered?</span>
-                <a
-                  href="./login"
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/login")}
                   className="ml-1 font-semibold text-orange-500 hover:underline"
                 >
                   Login here
-                </a>
+                </button>
               </div>
             </form>
           </div>

@@ -1,5 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../config/api.config";
+
 const Login = () => {
+  const navigate = useNavigate();
+
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -17,12 +22,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Login data submitted:", loginData);
-
     const payload = {
       email: loginData.email.toLowerCase(),
       password: loginData.password,
     };
+
+    try {
+      const res = await api.post("/auth/login", payload);
+      localStorage.setItem("user", JSON.stringify(res.data.data));
+      navigate("/");
+    } catch (error) {
+      setValidateError(error?.response?.data?.message || "Login failed");
+    }
   };
 
   return (
@@ -76,6 +87,8 @@ const Login = () => {
                   Forgot Password?
                 </span>
               </div>
+
+              {validateError && <p className="mt-3 text-sm text-red-500">{validateError}</p>}
 
               <button
                 type="submit"

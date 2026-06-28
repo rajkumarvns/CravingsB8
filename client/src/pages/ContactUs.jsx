@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import foodBgImg from "../assets/contactPage.jpg";
+import api from "../config/api.config";
 
 const ContactUs = () => {
   const [contactUsData, setContactUsData] = useState({
     fullname: "",
     email: "",
     phone: "",
-    contactmsg: "",
-    textArea: "",
+    subject: "",
+    message: "",
   });
 
   const [validateError, setValidateError] = useState();
@@ -22,12 +23,21 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Contact-Us data submitted:", contactUsData);
-
     const payload = {
-      fullname: contactUsData.name.toLowerCase(),
-      contactmsg: contactUsData.contactmsg,
+      fullName: contactUsData.fullname.trim(),
+      email: contactUsData.email.toLowerCase(),
+      phone: contactUsData.phone,
+      subject: contactUsData.subject,
+      message: contactUsData.message,
     };
+
+    try {
+      const res = await api.post("/contact-us", payload);
+      alert(res.data.message);
+      setContactUsData({ fullname: "", email: "", phone: "", subject: "", message: "" });
+    } catch (error) {
+      setValidateError(error?.response?.data?.message || "Unable to send message");
+    }
   };
 
   return (
@@ -82,10 +92,10 @@ const ContactUs = () => {
 
               <div className="flex flex-col gap-2">
                 <input
-                  type="contactmsg"
-                  id="contactmsg"
-                  name="contactmsg"
-                  value={contactUsData.contactmsg}
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={contactUsData.subject}
                   onChange={handleChange}
                   className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
                   placeholder="What is this about?"
@@ -93,18 +103,19 @@ const ContactUs = () => {
               </div>
               <div className="flex flex-col border-2 rounded mt-4 border-gray-500 w-full h-25 p-2 ">
                 <textarea
-                  name="textArea"
-                  id="textArea"
-                  value={contactUsData.textArea}
+                  name="message"
+                  id="message"
+                  value={contactUsData.message}
                   onChange={(e) =>
                     setContactUsData({
                       ...contactUsData,
-                      textArea: e.target.value,
+                      message: e.target.value,
                     })
                   }
                   placeholder="Write your message here..."
                 ></textarea>
               </div>
+              {validateError && <p className="mt-3 text-sm text-red-500">{validateError}</p>}
               <button
                 type="submit"
                 className="w-full mt-6 bg-(--accent) text-(--primary-text) py-3 px-4 rounded hover:bg-(--accent) transition"
