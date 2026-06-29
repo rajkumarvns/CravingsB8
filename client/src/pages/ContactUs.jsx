@@ -62,7 +62,7 @@ const ContactUs = () => {
                   name="fullname"
                   value={contactUsData.fullname}
                   onChange={handleChange}
-                  className="my-5 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                  className="my-5 border-amber-600 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
                   placeholder="Enter your full name"
                 />
               </div>
@@ -74,7 +74,7 @@ const ContactUs = () => {
                   name="email"
                   value={contactUsData.email}
                   onChange={handleChange}
-                  className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                  className="border-amber-600 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
                   placeholder="Enter your email"
                 />
               </div>
@@ -85,7 +85,7 @@ const ContactUs = () => {
                   name="phone"
                   value={contactUsData.phone}
                   onChange={handleChange}
-                  className="my-5 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                  className="border-amber-600 border my-5 p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
                   placeholder="Enter your phone number"
                 />
               </div>
@@ -97,14 +97,15 @@ const ContactUs = () => {
                   name="subject"
                   value={contactUsData.subject}
                   onChange={handleChange}
-                  className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                  className="border-amber-600 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
                   placeholder="What is this about?"
                 />
               </div>
-              <div className="flex flex-col border-2 rounded mt-4 border-gray-500 w-full h-25 p-2 ">
+              <div className="flex flex-col border rounded-xl mt-4 border-orange-400 w-full h-25 p-2 ">
                 <textarea
                   name="message"
                   id="message"
+                  className="w-full h-40 rounded-xl border border-orange-400 p-2 focus:outline-none focus:ring-1 focus:ring-orange-400"
                   value={contactUsData.message}
                   onChange={(e) =>
                     setContactUsData({
@@ -112,6 +113,7 @@ const ContactUs = () => {
                       message: e.target.value,
                     })
                   }
+                  
                   placeholder="Write your message here..."
                 ></textarea>
               </div>

@@ -73,7 +73,7 @@ const Register = () => {
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 md:grid-cols-2 md:px-8 md:py-12 lg:px-10">
           <div className="rounded-4xl border border-white/20 bg-white/90 p-6 shadow-2xl backdrop-blur md:p-8 lg:p-10">
             <div className="text-center">
-              <div className="mb-3 inline-flex rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-600">
+              <div className="mb-3 inline-flex rounded-full bg-orange-200 px-3 py-2 text-sm font-semibold text-orange-600">
                 Join Cravings
               </div>
 
@@ -89,7 +89,7 @@ const Register = () => {
                 name="fullname"
                 value={registerData.fullname}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-xl border border-orange-400 p-3 focus:outline-none focus:ring-1 focus:ring-orange-400"
                 placeholder="Enter your full name"
               />
 
@@ -99,7 +99,7 @@ const Register = () => {
                 name="email"
                 value={registerData.email}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-xl border border-orange-400 p-3 focus:outline-none focus:ring-1 focus:ring-orange-400"
                 placeholder="Enter your email"
               />
 
@@ -109,7 +109,7 @@ const Register = () => {
                 name="phone"
                 value={registerData.phone}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-xl border border-orange-400 p-3 focus:outline-none focus:ring-1 focus:ring-orange-400"
                 placeholder="Enter your phone number"
               />
 
@@ -119,7 +119,7 @@ const Register = () => {
                 name="gender"
                 value={registerData.gender}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-xl border border-orange-400 p-3 focus:outline-none focus:ring-1 focus:ring-orange-400"
                 placeholder="Enter your gender"
               />
 
@@ -129,7 +129,7 @@ const Register = () => {
                 name="dob"
                 value={registerData.dob}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-xl border border-orange-400 p-3 focus:outline-none focus:ring-1 focus:ring-orange-400"
               />
 
               <input
@@ -138,7 +138,7 @@ const Register = () => {
                 name="password"
                 value={registerData.password}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-xl border border-orange-400 p-3 focus:outline-none focus:ring-1 focus:ring-orange-400"
                 placeholder="Enter your password"
               />
 
@@ -148,7 +148,7 @@ const Register = () => {
                 name="confirmPassword"
                 value={registerData.confirmPassword}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-xl border border-orange-400 p-3 focus:outline-none focus:ring-1 focus:ring-orange-400"
                 placeholder="Confirm your password"
               />
 
