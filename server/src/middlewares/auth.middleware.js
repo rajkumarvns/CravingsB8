@@ -5,8 +5,9 @@ export const AuthProtect = async (req, res, next) => {
   } catch (error) {
     console.log(error.message);
 
-    const error = new Error("error at middleware");
-    error.statusCode || 500;
-    next(error);
+    const err = new Error("Error at Authentication Middleware");
+    err.statusCode = 500;
+
+    next(err);
   }
 };

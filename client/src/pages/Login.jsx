@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../config/api.config";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,12 +28,17 @@ const Login = () => {
       password: loginData.password,
     };
 
-    try {
+     try {
       const res = await api.post("/auth/login", payload);
-      localStorage.setItem("user", JSON.stringify(res.data.data));
-      navigate("/");
+      toast.success(res.data.message);
+      // console.log(res.data.data.photo);
+      sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
+      navigate("/user/dashboard");
     } catch (error) {
-      setValidateError(error?.response?.data?.message || "Login failed");
+      toast.error(
+        error.response.status + " | " + error.response?.data?.message ||
+          error.message,
+      );
     }
   };
 
@@ -88,7 +94,9 @@ const Login = () => {
                 </span>
               </div>
 
-              {validateError && <p className="mt-3 text-sm text-red-500">{validateError}</p>}
+              {validateError && (
+                <p className="mt-3 text-sm text-red-500">{validateError}</p>
+              )}
 
               <button
                 type="submit"
