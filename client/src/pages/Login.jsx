@@ -1,132 +1,167 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../config/api.config";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setUser, setIsLogin } = useAuth();
 
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
 
-  const [validateError, setValidateError] = useState();
+  const [validateError, setValidateError] = useState("");
 
+  // Handle Input Change
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
 
-    setLoginData((prevData) => ({ ...prevData, [name]: value }));
+    setLoginData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
+  // Handle Login
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation
+    if (!loginData.email || !loginData.password) {
+      setValidateError("Email and Password are required.");
+      return;
+    }
+
+    setValidateError("");
+
     const payload = {
-      email: loginData.email.toLowerCase(),
+      email: loginData.email.trim().toLowerCase(),
       password: loginData.password,
     };
 
-     try {
+    try {
       const res = await api.post("/auth/login", payload);
+
       toast.success(res.data.message);
-      // console.log(res.data.data.photo);
-      sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
+
+      // Save User in Context
+      setUser(res.data.data);
+      setIsLogin(true);
+
+      // Save User in Session Storage
+      sessionStorage.setItem(
+        "UserData",
+        JSON.stringify(res.data.data)
+      );
+
       navigate("/user/dashboard");
     } catch (error) {
-      toast.error(
-        error.response.status + " | " + error.response?.data?.message ||
-          error.message,
-      );
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Login Failed";
+
+      setValidateError(message);
+      toast.error(message);
     }
   };
 
   return (
-    <>
-      <div className="h-fit bg-cover bg-center bg-[url('/foodTable.webp')]">
-        <div className="h-[92vh] grid grid-cols-1 md:grid-cols-2 p-10 items-start">
-          <div className="w-full max-w-md bg-(--background) rounded-3xl shadow p-6 md:p-10 mt-5 md:mt-0 self-start">
-            <div className="var(text-2xl) font-bold mb-1 text-(--accent) flex justify-center items-center text-3xl">
-              Welcome Back!
+    <div className="h-fit bg-cover bg-center bg-[url('/foodTable.webp')]">
+      <div className="h-[92vh] grid grid-cols-1 md:grid-cols-2 p-10 items-start">
+        <div className="w-full max-w-md bg-(--background) rounded-3xl shadow p-6 md:p-10 mt-5">
+
+          <h1 className="text-3xl text-center font-bold text-(--accent)">
+            Welcome Back!
+          </h1>
+
+          <p className="text-center mt-2">
+            Login to your craving account
+          </p>
+
+          <form onSubmit={handleSubmit} className="mt-6">
+
+            {/* Email */}
+            <div className="flex flex-col gap-2">
+              <label>Email</label>
+
+              <input
+                type="email"
+                name="email"
+                value={loginData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                className="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-(--accent)"
+              />
             </div>
-            <span className="block text-center">
-              Login to your craving account
-            </span>
 
-            <form onSubmit={handleSubmit} className="mt-6">
-              <div className="flex flex-col gap-2">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={loginData.email}
-                  onChange={handleChange}
-                  className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
-                  placeholder="Enter your email"
-                />
+            {/* Password */}
+            <div className="flex flex-col gap-2 mt-4">
+              <label>Password</label>
+
+              <input
+                type="password"
+                name="password"
+                value={loginData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                className="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-(--accent)"
+              />
+            </div>
+
+            {/* Remember */}
+            <div className="mt-4 flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="remember" />
+                <label htmlFor="remember">Remember Me</label>
               </div>
 
-              <div className="flex flex-col gap-2 mt-4">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={loginData.password}
-                  onChange={handleChange}
-                  className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent)"
-                  placeholder="Enter your password"
-                />
-              </div>
+              <span className="cursor-pointer hover:underline hover:text-(--accent)">
+                Forgot Password?
+              </span>
+            </div>
 
-              <div className="mt-4 flex justify-between items-center text-sm">
-                <div className="flex items-center">
-                  <input type="checkbox" id="remember" />
-                  <label htmlFor="remember" className="ms-1">
-                    Remember Me
-                  </label>
-                </div>
+            {/* Error */}
+            {validateError && (
+              <p className="text-red-500 mt-3">
+                {validateError}
+              </p>
+            )}
 
-                <span className="cursor-pointer hover:underline hover:text-(--accent)">
-                  Forgot Password?
+            {/* Login Button */}
+            <button
+              type="submit"
+              className="w-full mt-6 bg-(--accent) text-(--primary-text) py-3 rounded hover:opacity-90"
+            >
+              Login
+            </button>
+
+            {/* Register */}
+            <div className="mt-6">
+              <div className="flex items-center">
+                <div className="flex-1 border-t"></div>
+
+                <span className="px-3 text-gray-500">
+                  Don't have an account?
                 </span>
+
+                <div className="flex-1 border-t"></div>
               </div>
 
-              {validateError && (
-                <p className="mt-3 text-sm text-red-500">{validateError}</p>
-              )}
+              <Link to="/register">
+                <p className="text-center text-(--accent) font-semibold text-lg mt-4 hover:underline">
+                  Create an Account
+                </p>
+              </Link>
+            </div>
 
-              <button
-                type="submit"
-                className="w-full mt-6 bg-(--accent) text-(--primary-text) py-3 px-4 rounded hover:bg-(--accent)"
-              >
-                Login
-              </button>
-
-              <div className="mt-6">
-                <div className="flex items-center">
-                  <div className="flex-1 border-t border-gray-400"></div>
-
-                  <span className="px-4 text-sm text-gray-600">
-                    Don't have an account?
-                  </span>
-
-                  <div className="flex-1 border-t border-gray-400"></div>
-                </div>
-
-                <a href="./register">
-                  <p className="text-center text-(--accent) text-lg font-semibold mt-3 cursor-pointer hover:underline">
-                    Create an account
-                  </p>
-                </a>
-              </div>
-            </form>
-          </div>
+          </form>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
