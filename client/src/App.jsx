@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 import UserDashboard from "./pages/dashboard/userDashboard";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const App = () => {
   return (

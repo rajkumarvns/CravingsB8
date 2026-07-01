@@ -22,7 +22,7 @@ export const ContactUsForm = async (req, res, next) => {
       message: "Thanks for Contacting us!",
     });
   } catch (error) {
-    console.log(error.message);
-    next();
+    // console.log(error.message);
+    next(error);
   }
 };

@@ -32,7 +32,7 @@ const ContactUs = () => {
     };
 
     try {
-      const res = await api.post("/contact-us", payload);
+      const res = await api.post("/public/contact-us", payload);
       alert(res.data.message);
       setContactUsData({ fullname: "", email: "", phone: "", subject: "", message: "" });
     } catch (error) {
