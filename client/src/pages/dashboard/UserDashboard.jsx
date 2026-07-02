@@ -24,12 +24,9 @@ const UserDashboard = () => {
         backgroundImage: `url(${bgImg})`,
       }}
     >
-      {/* Background Overlay */}
       <div className="min-h-screen bg-black/40 flex justify-center items-center p-6">
         <div className="w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl bg-white/95 backdrop-blur-md">
-          {/* Header */}
           <div className="h-40 bg-linear-to-r from-orange-500 to-red-500 relative">
-            {/* Profile Image */}
             <div className="absolute left-1/2 -translate-x-1/2 top-20">
               {userData.photo ? (
                 <img
@@ -45,7 +42,6 @@ const UserDashboard = () => {
             </div>
           </div>
 
-          {/* Card Body */}
           <div className="pt-20 px-8 pb-8">
             <h2 className="text-3xl font-bold text-center text-gray-800">
               {userData.fullName}
@@ -57,28 +53,22 @@ const UserDashboard = () => {
             </p>
 
             <div className="mt-8 space-y-5">
-              {/* Email */}
               <div className="bg-orange-50 rounded-xl p-4 shadow-md">
                 <p className="text-sm text-gray-500">Email Address</p>
                 <p className="text-lg font-semibold break-all">
                   {userData.email}
                 </p>
               </div>
-
-              {/* Phone */}
               <div className="bg-orange-50 rounded-xl p-4 shadow-md">
                 <p className="text-sm text-gray-500">Phone Number</p>
                 <p className="text-lg font-semibold">{userData.phone}</p>
               </div>
-
-              {/* Account Type */}
               <div className="bg-orange-50 rounded-xl p-4 shadow-md">
                 <p className="text-sm text-gray-500">Account Type</p>
                 <p className="text-lg font-semibold">Customer</p>
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="mt-8 flex gap-4">
               <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition-all duration-300">
                 Edit Profile
