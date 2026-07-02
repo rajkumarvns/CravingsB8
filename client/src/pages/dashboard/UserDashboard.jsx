@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import bgImg from "../../assets/commonBG.avif";
 
+import Sidebar from "../../components/userDashboard/Sidebar";
+import Overview from "../../components/userDashboard/Overview";
+import Orders from "../../components/userDashboard/Orders";
+import WishList from "../../components/userDashboard/WishList";
+import Settings from "../../components/userDashboard/Settings";
+
 const UserDashboard = () => {
   const [userData, setUserData] = useState(null);
+  const [active, setActive] = useState("Overview");
 
   useEffect(() => {
     const data = JSON.parse(sessionStorage.getItem("UserData"));
@@ -18,70 +25,37 @@ const UserDashboard = () => {
   }
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: `url(${bgImg})`,
-      }}
-    >
-      <div className="min-h-screen bg-black/40 flex justify-center items-center p-6">
-        <div className="w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl bg-white/95 backdrop-blur-md">
-          <div className="h-40 bg-linear-to-r from-orange-500 to-red-500 relative">
-            <div className="absolute left-1/2 -translate-x-1/2 top-20">
-              {userData.photo ? (
-                <img
-                  src={userData.photo}
-                  alt={userData.fullName}
-                  className="w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover"
-                />
-              ) : (
-                <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl bg-orange-200 flex justify-center items-center text-5xl font-bold text-orange-700">
-                  {userData.fullName.charAt(0).toUpperCase()}
-                </div>
-              )}
-            </div>
+    
+      <div className="min-h-screen bg-black/40 p-8 ">
+
+        <div className="max-w-7xl mx-auto flex gap-6 h-[88vh] shadow-xl rounded-2xl mt-2">
+
+          {/* Sidebar */}
+          <div className="w-1/5 bg-transparent rounded-2xl shadow-2xl overflow-hidde">
+            <Sidebar active={active} setActive={setActive} />
           </div>
 
-          <div className="pt-20 px-8 pb-8">
-            <h2 className="text-3xl font-bold text-center text-gray-800">
-              {userData.fullName}
-            </h2>
+          {/* Content */}
+          <div className="w-4/5 bg-trasnparent rounded-2xl shadow-2xl p-6 overflow-y-auto">
 
-            <p className="text-center text-gray-500 mt-2">
-              Welcome to{" "}
-              <span className="font-semibold text-orange-500">Cravings 🍔</span>
-            </p>
+            {active === "Overview" && (
+              <Overview userData={userData} />
+            )}
 
-            <div className="mt-8 space-y-5">
-              <div className="bg-orange-50 rounded-xl p-4 shadow-md">
-                <p className="text-sm text-gray-500">Email Address</p>
-                <p className="text-lg font-semibold break-all">
-                  {userData.email}
-                </p>
-              </div>
-              <div className="bg-orange-50 rounded-xl p-4 shadow-md">
-                <p className="text-sm text-gray-500">Phone Number</p>
-                <p className="text-lg font-semibold">{userData.phone}</p>
-              </div>
-              <div className="bg-orange-50 rounded-xl p-4 shadow-md">
-                <p className="text-sm text-gray-500">Account Type</p>
-                <p className="text-lg font-semibold">Customer</p>
-              </div>
-            </div>
+            {active === "Orders" && <Orders />}
 
-            <div className="mt-8 flex gap-4">
-              <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition-all duration-300">
-                Edit Profile
-              </button>
+            {active === "WishList" && <WishList />}
 
-              <button className="flex-1 border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white py-3 rounded-xl font-semibold transition-all duration-300">
-                My Orders
-              </button>
-            </div>
+            {active === "Settings" && (
+              <Settings userData={userData} />
+            )}
+
           </div>
+
         </div>
+
       </div>
-    </div>
+    
   );
 };
 

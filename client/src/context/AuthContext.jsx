@@ -12,12 +12,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     setIsLogin(!!user);
-
-    if (user) {
-      sessionStorage.setItem("UserData", JSON.stringify(user));
-    } else {
-      sessionStorage.removeItem("UserData");
-    }
   }, [user]);
 
   const value = {
