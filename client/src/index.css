@@ -66,3 +66,50 @@
   --black: #000000;
   --white: #ffffff;
 }
+.light {
+  --background: #fff8f2;
+
+  --primary: #ffffff;
+
+  --secondary: #ffe7cc;
+
+  --accent: #f97316;
+
+  --text: #1f2937;
+
+  --error: #dc2626;
+
+  --light-gray: #e5e7eb;
+}
+
+.dark {
+  --background: #111827;
+
+  --primary: #1f2937;
+
+  --secondary: #374151;
+
+  --accent: #f59e0b;
+
+  --text: #f9fafb;
+
+  --error: #ef4444;
+
+  --light-gray: #d1d5db;
+}
+
+.coffee {
+  --background: #fff7ed;
+
+  --primary: #fbf5f1;
+
+  --secondary: #e7d3c5;
+
+  --accent: #8b4513;
+
+  --text: #3e2723;
+
+  --error: #c62828;
+
+  --light-gray: #d6ccc2;
+}

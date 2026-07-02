@@ -61,9 +61,7 @@ const ContactUs = () => {
         message: "",
       });
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Unable to send message."
-      );
+      toast.error(error.response?.data?.message || "Unable to send message.");
     }
   };
 
@@ -74,7 +72,6 @@ const ContactUs = () => {
     >
       <div className="flex justify-center items-center py-10 px-5">
         <div className="w-full max-w-lg bg-white rounded-3xl shadow-lg p-8">
-
           <h1 className="text-3xl font-bold text-center text-orange-600">
             Contact Us
           </h1>
@@ -84,7 +81,6 @@ const ContactUs = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6">
-
             <input
               type="text"
               name="fullname"
@@ -131,9 +127,7 @@ const ContactUs = () => {
             />
 
             {validateError && (
-              <p className="text-red-500 text-sm mb-4">
-                {validateError}
-              </p>
+              <p className="text-red-500 text-sm mb-4">{validateError}</p>
             )}
 
             <button
@@ -142,7 +136,6 @@ const ContactUs = () => {
             >
               Send Message
             </button>
-
           </form>
         </div>
       </div>

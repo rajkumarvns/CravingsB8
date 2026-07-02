@@ -1,85 +1,105 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
-import { useAuth } from "../context/AuthContext";
 import { AiOutlineLogout } from "react-icons/ai";
 
+import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+
 const Navbar = () => {
+  const { theme, setTheme } = useTheme();
+
   const { user, setUser, isLogin, setIsLogin } = useAuth();
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
     sessionStorage.removeItem("UserData");
-    setIsLogin(false);
     setUser(null);
+    setIsLogin(false);
     navigate("/");
   };
 
   return (
-    <>
-      <div className="bg-(--accent) text-lg text-(--primary-text) p-3 flex justify-between items-center">
-        {/* Logo */}
-        <div>
-          <Link to="/">
-            <img src={logo} alt="Logo" className="h-12 w-auto" />
-          </Link>
+    <div
+      className="flex justify-between items-center px-8 py-4"
+      style={{
+        background: "var(--accent)",
+        color: "var(--text)",
+      }}
+    >
+      {/* Logo */}
+      <Link to="/">
+        <img src={logo} alt="Logo" className="h-12" />
+      </Link>
+
+      {/* Navigation */}
+      <div className="flex items-center gap-6">
+        <Link to="/" className="hover:underline">
+          Home
+        </Link>
+
+        <Link to="/contact-us" className="hover:underline">
+          Contact Us
+        </Link>
+
+        {/* Theme Buttons */}
+
+        <div className="flex items-center gap-2 border-l pl-4">
+          <button
+            onClick={() => setTheme("light")}
+            className={`w-6 h-6 rounded-full border-2 ${
+              theme === "light" ? "border-white scale-110" : "border-gray-300"
+            }`}
+            style={{ background: "#F97316" }}
+            title="Light Theme"
+          ></button>
+
+          <button
+            onClick={() => setTheme("dark")}
+            className={`w-6 h-6 rounded-full border-2 ${
+              theme === "dark" ? "border-white scale-110" : "border-gray-300"
+            }`}
+            style={{ background: "#111827" }}
+            title="Dark Theme"
+          ></button>
+
+          <button
+            onClick={() => setTheme("coffee")}
+            className={`w-6 h-6 rounded-full border-2 ${
+              theme === "coffee" ? "border-white scale-110" : "border-gray-300"
+            }`}
+            style={{ background: "#8B4513" }}
+            title="Coffee Theme"
+          ></button>
         </div>
 
-        {/* Navigation */}
-        <div className="flex items-center gap-5">
-          <Link to="/" className="hover:underline">
-            Home
-          </Link>
+        {isLogin ? (
+          <div className="flex items-center gap-3 border-l pl-4">
+            <img
+              src={user?.photo}
+              alt=""
+              className="w-10 h-10 rounded-full object-cover"
+            />
 
-          <Link to="/contact-us" className="hover:underline">
-            Contact Us
-          </Link>
+            <Link to="/user/dashboard">{user?.fullName}</Link>
 
-          {isLogin ? (
-            <div className="border-l-2 pl-4 flex items-center gap-4">
-              <div className="w-9 h-9 rounded-full overflow-hidden">
-                <img
-                  src={user?.photo}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+            <button
+              onClick={handleLogout}
+              className="text-2xl hover:text-red-500"
+            >
+              <AiOutlineLogout />
+            </button>
+          </div>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
 
-              <Link
-                to="/user/dashboard"
-                className="hover:underline hover:text-(--error)"
-              >
-                {user?.fullName}
-              </Link>
-
-              <button
-                onClick={handleLogout}
-                className="text-light-500 hover:text-red-600 text-2xl"
-                title="Logout"
-              >
-                <AiOutlineLogout />
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-5">
-              <Link
-                to="/login"
-                className="hover:underline hover:underline-offset-4"
-              >
-                Login
-              </Link>
-
-              <Link
-                to="/register"
-                className="hover:underline hover:text-(--light-gray)"
-              >
-                Register
-              </Link>
-            </div>
-          )}
-        </div>
+            <Link to="/register">Register</Link>
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
