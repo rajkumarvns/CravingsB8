@@ -13,7 +13,9 @@ const ContactUs = () => {
   });
 
   const [validateError, setValidateError] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  // Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -21,21 +23,49 @@ const ContactUs = () => {
       ...prev,
       [name]: value,
     }));
+
+    if (validateError) {
+      setValidateError("");
+    }
   };
 
+  // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
-    if (
-      !contactUsData.fullname ||
-      !contactUsData.email ||
-      !contactUsData.phone ||
-      !contactUsData.subject ||
-      !contactUsData.message
-    ) {
-      setValidateError("All fields are required.");
-      return;
+    // Full Name Validation
+    if (!contactUsData.fullname.trim()) {
+      return setValidateError("Full Name is required.");
+    }
+
+    // Email Validation
+    if (!contactUsData.email.trim()) {
+      return setValidateError("Email is required.");
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(contactUsData.email)) {
+      return setValidateError("Please enter a valid email address.");
+    }
+
+    // Phone Validation
+    if (!contactUsData.phone.trim()) {
+      return setValidateError("Phone Number is required.");
+    }
+
+    if (!/^[0-9]{10}$/.test(contactUsData.phone.trim())) {
+      return setValidateError("Phone Number must contain exactly 10 digits.");
+    }
+
+    // Subject Validation
+    if (!contactUsData.subject.trim()) {
+      return setValidateError("Subject is required.");
+    }
+
+    // Message Validation
+    if (!contactUsData.message.trim()) {
+      return setValidateError("Message is required.");
     }
 
     setValidateError("");
@@ -49,6 +79,8 @@ const ContactUs = () => {
     };
 
     try {
+      setLoading(true);
+
       const res = await api.post("/public/contact-us", payload);
 
       toast.success(res.data.message);
@@ -60,8 +92,18 @@ const ContactUs = () => {
         subject: "",
         message: "",
       });
+
+      setValidateError("");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Unable to send message.");
+      console.log(error);
+
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Unable to send message.",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,11 +162,16 @@ const ContactUs = () => {
             <textarea
               name="message"
               rows="5"
+              maxLength={500}
               value={contactUsData.message}
               onChange={handleChange}
               placeholder="Write your message here..."
-              className="w-full border border-orange-400 rounded p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+              className="w-full border border-orange-400 rounded p-3 mb-1 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
             />
+
+            <div className="text-right text-sm text-gray-500 mb-4">
+              {contactUsData.message.length}/500
+            </div>
 
             {validateError && (
               <p className="text-red-500 text-sm mb-4">{validateError}</p>
@@ -132,9 +179,10 @@ const ContactUs = () => {
 
             <button
               type="submit"
-              className="w-full bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 transition"
+              disabled={loading}
+              className="w-full bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              Send Message
+              {loading ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>
