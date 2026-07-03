@@ -1,100 +1,95 @@
 import React, { useState } from "react";
-
+import { useAuth } from "../../context/AuthContext";
+import api from "../../config/api.config.js";
+import toast from "react-hot-toast";
 const Settings = ({ userData }) => {
+  const { user, setUser } = useAuth();
 
-  const [formData, setFormData] = useState({
-    fullName: userData.fullName,
-    email: userData.email,
-    phone: userData.phone,
-  });
+  const [isEditable, setIsEditable] = useState(false);
+  const [tempUser, setTempUser] = useState(user);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setTempUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSave = async () => {
+    setIsEditable(false);
 
-    console.log(formData);
+    const payLoad = {
+      email: tempUser.email.toLowerCase(),
+      fullName: tempUser.fullName,
+      phone: tempUser.phone,
+    };
 
-    alert("Profile Updated Successfully");
+    console.log(payLoad);
+
+    try {
+      const res = await api.put("/user/edit-profile", payLoad);
+      setUser(res.data.data);
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(
+        error.response.status + " | " + error.response?.data?.message ||
+          error.message,
+      );
+    }
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <>
+      {isEditable === true ? (
+        <>
+          <div className="grid w-sm gap-3">
+            <input
+              type="text"
+              name="fullName"
+              value={tempUser.fullName}
+              className="border p-2"
+              onChange={handleChange}
+            />
+            <input
+              type="email"
+              name="email"
+              value={tempUser.email}
+              className="border p-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              disabled
+            />
+            <input
+              type="number"
+              name="phone"
+              value={tempUser.phone}
+              className="border p-2"
+              onChange={handleChange}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <div>{user.fullName}</div>
+            <div>{user.email}</div>
+            <div>{user.phone}</div>
+          </div>
+        </>
+      )}
 
-      <h1 className="text-3xl font-bold mb-6">
-        Account Settings
-      </h1>
-
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-5"
-      >
-
-        <div>
-
-          <label className="font-medium">
-            Full Name
-          </label>
-
-          <input
-            type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-3 mt-2"
-          />
-
-        </div>
-
-        <div>
-
-          <label className="font-medium">
-            Email
-          </label>
-
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-3 mt-2"
-          />
-
-        </div>
-
-        <div>
-
-          <label className="font-medium">
-            Phone
-          </label>
-
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-3 mt-2"
-          />
-
-        </div>
-
-        <button
-          type="submit"
-          className="bg-orange-500 text-white px-8 py-3 rounded-lg hover:bg-orange-600"
-        >
-          Save Changes
+      {isEditable === true ? (
+        <>
+          <button onClick={() => setIsEditable(false)} className="border p-3 ">
+            Cancel
+          </button>
+          <button onClick={handleSave} className="border p-3 ">
+            Save
+          </button>
+        </>
+      ) : (
+        <button onClick={() => setIsEditable(true)} className="border p-3 ">
+          Edit
         </button>
-
-      </form>
-
-    </div>
+      )}
+    </>
   );
 };
 

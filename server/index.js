@@ -7,15 +7,18 @@ import morgan from "morgan";
 import connectDB from "./src/config/dbconnection.config.js";
 import AuthRouter from "./src/router/auth.route.js";
 import PublicRouter from "./src/router/public.route.js";
-
+import UserRouter from "./src/router/user.route.js";
+import cookieParser from "cookie-parser";
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cookieParser());
 app.use(morgan("dev"));
 
 app.use(express.json());
 app.use("/auth", AuthRouter);
 app.use("/public", PublicRouter);
+app.use("/user", UserRouter);
 
 // default API
 app.get("/", (req, res) => {

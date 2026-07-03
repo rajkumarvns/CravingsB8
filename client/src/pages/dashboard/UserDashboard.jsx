@@ -23,7 +23,7 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black/40 p-8 ">
+    <div className="min-h-screen bg-black/40 p-6 ">
       <div className="max-w-7xl mx-auto flex gap-6 h-[88vh] shadow-xl rounded-2xl mt-2">
         {/* Sidebar */}
         <div className="w-1/5 bg-transparent rounded-2xl shadow-2xl overflow-hidden">

@@ -5,6 +5,8 @@ import { AiOutlineLogout } from "react-icons/ai";
 
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
+import api from "../config/api.config.js";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
@@ -13,11 +15,19 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("UserData");
-    setUser(null);
-    setIsLogin(false);
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      const res = await api.get("auth/logout");
+      sessionStorage.removeItem("UserData");
+      setUser(null);
+      setIsLogin(false);
+      navigate("/");
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(
+        error.response.status + " | " + error.response?.data?.message,
+      ) || error.message;
+    }
   };
 
   return (
