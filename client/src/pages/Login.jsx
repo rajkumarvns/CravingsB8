@@ -70,15 +70,15 @@ const Login = () => {
   };
 
   return (
-    <div className="h-fit bg-cover bg-center bg-[url('/foodTable.webp')]">
-      <div className="h-[92vh] grid grid-cols-1 md:grid-cols-2 p-10 items-start">
-        <div className="w-full max-w-md bg-(--background) rounded-3xl shadow p-6 md:p-10 mt-5">
+    <div className="min-h-screen bg-cover bg-center bg-[url('/foodTable.webp')]">
+      <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 p-10 items-start justify-center">
+        <div className="w-full max-w-md bg-white/95 text-(--color-base-content) rounded-3xl shadow p-6 md:p-10 mt-5">
 
-          <h1 className="text-3xl text-center font-bold text-(--accent)">
+          <h1 className="text-3xl text-center font-bold text-(--color-accent)">
             Welcome Back!
           </h1>
 
-          <p className="text-center mt-2">
+          <p className="text-center mt-2 text-(--color-neutral)">
             Login to your craving account
           </p>
 
@@ -86,7 +86,7 @@ const Login = () => {
 
             {/* Email */}
             <div className="flex flex-col gap-2">
-              <label>Email</label>
+              <label className="text-sm text-(--color-neutral)">Email</label>
 
               <input
                 type="email"
@@ -94,7 +94,7 @@ const Login = () => {
                 value={loginData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
-                className="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                className="border rounded p-2 text-(--color-base-content) focus:outline-none focus:ring-2 focus:ring-(--color-accent)"
               />
             </div>
 
@@ -108,7 +108,7 @@ const Login = () => {
                 value={loginData.password}
                 onChange={handleChange}
                 placeholder="Enter your password"
-                className="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-(--accent)"
+                className="border rounded p-2 text-(--color-base-content) focus:outline-none focus:ring-2 focus:ring-(--color-accent)"
               />
             </div>
 
@@ -119,7 +119,7 @@ const Login = () => {
                 <label htmlFor="remember">Remember Me</label>
               </div>
 
-              <span className="cursor-pointer hover:underline hover:text-(--accent)">
+              <span className="cursor-pointer hover:underline hover:text-(--color-accent)">
                 Forgot Password?
               </span>
             </div>
@@ -134,7 +134,7 @@ const Login = () => {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full mt-6 bg-(--accent) text-(--primary-text) py-3 rounded hover:opacity-90"
+              className="w-full mt-6 bg-(--color-accent) text-(--color-accent-content) py-3 rounded hover:opacity-90"
             >
               Login
             </button>
@@ -152,7 +152,7 @@ const Login = () => {
               </div>
 
               <Link to="/register">
-                <p className="text-center text-(--accent) font-semibold text-lg mt-4 hover:underline">
+                <p className="text-center text-(--color-accent) font-semibold text-lg mt-4 hover:underline">
                   Create an Account
                 </p>
               </Link>

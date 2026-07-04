@@ -1,43 +1,67 @@
 @import "tailwindcss";
 
+* {
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
+
 :root {
-  --primary: #001bb7;
-  --primary-text: #dfdff8;
-  --secondary: #0046ff;
-  --accent: #ff8040;
-  --success: #16a34a;
-  --error: #dc2626;
-  --warning: #f59e0b;
-  --background: #f5f1dc;
-  --text: #111827;
+  /* Primary */
+  --color-primary: #c2410c;
+  --color-primary-content: #ffffff;
+
+  /* Secondary */
+  --color-secondary: #6b7280;
+  --color-secondary-content: #ffffff;
+
+  /* Accent */
+  --color-accent: #d9468f;
+  --color-accent-content: #ffffff;
+
+  /* Neutral */
+  --color-neutral: #3f3f46;
+  --color-neutral-content: #f4f4f5;
+
+  /* Base Surfaces */
+  --color-base-100: #fff8f1;
+  --color-base-200: #f5ede5;
+  --color-base-300: #e7d9c9;
+  --color-base-content: #2d1b10;
+
+  /* Info */
+  --color-info: #0ea5e9;
+  --color-info-content: #ffffff;
+
+  /* Success */
+  --color-success: #22c55e;
+  --color-success-content: #ffffff;
+
+  /* Warning */
+  --color-warning: #f59e0b;
+  --color-warning-content: #2d1b10;
+
+  /* Error */
+  --color-error: #ef4444;
+  --color-error-content: #ffffff;
 }
 
-.light {
-  --accent: #f97316;
-
-  --text: #1f2937;
-
-  --error: #dc2626;
-
-  --light-gray: #e5e7eb;
+/* Remove number input spinner buttons */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
 }
 
-.dark {
-  --accent: #0e0e0d;
-
-  --text: #f9fafb;
-
-  --error: #ef4444;
-
-  --light-gray: #d1d5db;
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
-.coffee {
-  --accent: #8b4513;
-
-  --text: #3e2723;
-
-  --error: #c62828;
-
-  --light-gray: #d6ccc2;
+/* Remove password input eye icon */
+input[type="password"]::-ms-reveal {
+  display: none;
 }

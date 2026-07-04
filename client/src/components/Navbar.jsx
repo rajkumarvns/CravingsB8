@@ -1,114 +1,98 @@
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
-import { AiOutlineLogout } from "react-icons/ai";
-
-import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
-import api from "../config/api.config.js";
 import toast from "react-hot-toast";
+import { FaPowerOff } from "react-icons/fa";
+import logoLight from "../assets/transparentLogoLight.png";
+import api from "../config/api.config";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { theme, setTheme } = useTheme();
-
-  const { user, setUser, isLogin, setIsLogin } = useAuth();
-
+  const { user, isLogin, role, setUser, setIsLogin, setRole } = useAuth();
   const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    if (role === "restaurant") {
+      navigate("/restaurant-dashboard");
+    } else if (role === "rider") {
+      navigate("/rider-dashboard");
+    } else if (role === "admin") {
+      navigate("/admin-dashboard");
+    } else {
+      navigate("/customer-dashboard");
+    }
+  };
 
   const handleLogout = async () => {
     try {
-      const res = await api.get("auth/logout");
-      sessionStorage.removeItem("UserData");
+      const res = await api.get("/auth/logout");
+
+      toast.success(res.data.message);
+
+      sessionStorage.removeItem("cravingUser");
       setUser(null);
       setIsLogin(false);
+      setRole(null);
       navigate("/");
-      toast.success(res.data.message);
     } catch (error) {
       toast.error(
-        error.response.status + " | " + error.response?.data?.message,
-      ) || error.message;
+        error.response?.data?.message ||
+          "Unknown error occurred during logout. Please try again.",
+      );
     }
   };
 
   return (
-    <div
-      className="flex justify-between items-center px-8 py-4 sticky top-0"
-      style={{
-        background: "var(--accent)",
-        color: "var(--text)",
-      }}
-    >
-      {/* Logo */}
-      <Link to="/">
-        <img src={logo} alt="Logo" className="h-12" />
-      </Link>
-
-      {/* Navigation */}
-      <div className="flex items-center gap-6">
-        <Link to="/" className="hover:underline">
-          Home
+    <div className="sticky top-0 z-99 flex items-center justify-between px-12 py-1 bg-(--color-primary) text-white w-full h-16 shadow-md">
+      <div className="h-full">
+        <Link to="/">
+          <img src={logoLight} alt="Logo" className="w-fit h-full" />
         </Link>
-
-        <Link to="/contact-us" className="hover:underline">
-          Contact Us
-        </Link>
-
-        {/* Theme Buttons */}
-
-        <div className="flex items-center gap-2 border-l pl-4">
-          <button
-            onClick={() => setTheme("light")}
-            className={`w-6 h-6 rounded-full border-2 ${
-              theme === "light" ? "border-white scale-110" : "border-gray-300"
-            }`}
-            style={{ background: "#F97316" }}
-            title="Light Theme"
-          ></button>
-
-          <button
-            onClick={() => setTheme("dark")}
-            className={`w-6 h-6 rounded-full border-2 ${
-              theme === "dark" ? "border-white scale-110" : "border-gray-300"
-            }`}
-            style={{ background: "#111827" }}
-            title="Dark Theme"
-          ></button>
-
-          <button
-            onClick={() => setTheme("coffee")}
-            className={`w-6 h-6 rounded-full border-2 ${
-              theme === "coffee" ? "border-white scale-110" : "border-gray-300"
-            }`}
-            style={{ background: "#8B4513" }}
-            title="Coffee Theme"
-          ></button>
-        </div>
-
-        {isLogin ? (
-          <div className="flex items-center gap-3 border-l pl-4">
-            <img
-              src={user?.photo}
-              alt=""
-              className="w-10 h-10 rounded-full object-cover"
-            />
-
-            <Link to="/user/dashboard">{user?.fullName}</Link>
-
-            <button
-              onClick={handleLogout}
-              className="text-2xl hover:text-red-500"
-            >
-              <AiOutlineLogout />
-            </button>
-          </div>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-
-            <Link to="/register">Register</Link>
-          </>
-        )}
       </div>
+
+      {isLogin ? (
+        <div className="flex items-center gap-2">
+          <button
+            className="flex gap-2 items-center text-(--color-primary-content) border border-transparent hover:border-(--color-primary-content) px-3 py-1 rounded"
+            title="Go to Dashboard"
+            onClick={handleNavigate}
+          >
+            {user?.photo && (
+              <img
+                src={user.photo}
+                alt={user?.fullName || "User"}
+                className="w-12 h-12 rounded-full object-cover object-top"
+              />
+            )}
+            <div className="flex flex-col items-start">
+              <span className="text-base">{user?.fullName}</span>
+              <span className="text-xs text-(--color-primary-content)/80">
+                Customer
+              </span>
+            </div>
+          </button>
+          <button
+            onClick={handleLogout}
+            className="text-(--color-primary-content) border border-transparent hover:border-(--color-primary-content) hover:bg-(--color-error) px-3 py-3 rounded"
+            title="Logout"
+          >
+            <FaPowerOff />
+          </button>
+        </div>
+      ) : (
+        <div className="flex items-center gap-2">
+          <Link
+            to="/login"
+            className="text-(--color-primary-content) border border-transparent hover:border-(--color-primary-content) px-3 py-1 rounded"
+          >
+            Login
+          </Link>
+          <Link
+            to="/register/customer"
+            className="bg-(--color-primary-content) text-(--color-primary) hover:bg-(--color-primary) hover:text-(--color-primary-content) border px-3 py-1 rounded"
+          >
+            Register
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
