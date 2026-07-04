@@ -77,15 +77,15 @@ const Settings = ({ userData }) => {
 
       {isEditable === true ? (
         <>
-          <button onClick={() => setIsEditable(false)} className="border p-3 ">
+          <button onClick={() => setIsEditable(false)} className="border p-3 m-2 rounded">
             Cancel
           </button>
-          <button onClick={handleSave} className="border p-3 ">
+          <button onClick={handleSave} className="border p-3 rounded-4xl">
             Save
           </button>
         </>
       ) : (
-        <button onClick={() => setIsEditable(true)} className="border p-3 ">
+        <button onClick={() => setIsEditable(true)} className="border p-3 rounded-4xl">
           Edit
         </button>
       )}

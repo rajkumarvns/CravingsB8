@@ -23,16 +23,15 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black/40 p-6 ">
-      <div className="max-w-7xl mx-auto flex gap-6 h-[88vh] shadow-xl rounded-2xl mt-2">
+    <div className="min-h-screen bg-black/40 ">
+      <div className=" mx-auto flex gap-6 h-[88vh] shadow-xl rounded-2xl">
         {/* Sidebar */}
         <div className="w-1/5 bg-transparent rounded-2xl shadow-2xl overflow-hidden">
           <Sidebar active={active} setActive={setActive} />
         </div>
 
-        {/* Content */}
         <div className="w-4/5 bg-transparent rounded-2xl shadow-2xl p-6 overflow-y-auto">
-          {active === "Overview" && <Overview userData={userData} />}
+          {active === "Overview" && <Overview userData={userData} setActive={setActive} />}
 
           {active === "Orders" && <Orders />}
 

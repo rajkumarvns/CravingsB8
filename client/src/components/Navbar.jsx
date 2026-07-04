@@ -32,7 +32,7 @@ const Navbar = () => {
 
   return (
     <div
-      className="flex justify-between items-center px-8 py-4"
+      className="flex justify-between items-center px-8 py-4 sticky top-0"
       style={{
         background: "var(--accent)",
         color: "var(--text)",
