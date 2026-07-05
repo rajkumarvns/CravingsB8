@@ -3,6 +3,7 @@ import { MdEdit } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../config/api.config";
 import toast from "react-hot-toast";
+import { MdOutlineAddAPhoto } from "react-icons/md";
 
 const CustomerSetting = () => {
   const { user, setUser } = useAuth();
@@ -15,6 +16,8 @@ const CustomerSetting = () => {
     photo: user?.photo || "https://via.placeholder.com/150",
   });
   const [editingProfile, setEditingProfile] = useState(false);
+  const [profilePicPreview, setProfilePicPreview] = useState(null);
+  const [profilePic, setProfilePic] = useState(null);
   const [formData, setFormData] = useState({
     fullName: user?.fullName || "",
     email: user?.email || "",
@@ -49,11 +52,15 @@ const CustomerSetting = () => {
     try {
       setIsSavingProfile(true);
 
-      const response = await api.put(`/user/edit-profile`, {
-        fullName: formData.fullName,
-        email: formData.email.toLowerCase(),
-        phone: formData.phone,
-      });
+      const payload = new FormData();
+
+      payload.append("fullName", formData.fullName);
+      payload.append("email", formData.email);
+      payload.append("phone", formData.phone);
+
+      payload.append("displayPic", profilePic);
+
+      const response = await api.put(`/user/edit-profile`, payload);
 
       const updatedUser = response.data.data;
       setProfileData({
@@ -83,6 +90,12 @@ const CustomerSetting = () => {
     });
     setEditingProfile(false);
   };
+  const handleProfilePicChange = (e) => {
+    const file = e.target.files[0];
+
+    setProfilePicPreview(URL.createObjectURL(file));
+    setProfilePic(file);
+  };
 
   return (
     <div className="overflow-y-auto h-full p-6 space-y-6">
@@ -90,6 +103,7 @@ const CustomerSetting = () => {
       <div className="bg-(--color-base-200) rounded-lg p-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Profile Information</h3>
+          <div className="flex gap-2 justify-end"></div>
           {!editingProfile && (
             <button
               onClick={() => setEditingProfile(true)}
@@ -170,23 +184,6 @@ const CustomerSetting = () => {
                   onChange={handleProfileChange}
                   className="w-full px-3 py-2 border border-(--color-secondary) rounded col-span-4"
                 />
-              </div>
-
-              <div className="flex gap-2 justify-end">
-                <button
-                  onClick={handleSaveProfile}
-                  className="bg-(--color-primary) text-(--color-primary-content) px-6 py-2 rounded font-semibold disabled:opacity-50"
-                  disabled={isSavingProfile}
-                >
-                  {isSavingProfile ? "Saving..." : "Save Changes"}
-                </button>
-                <button
-                  onClick={handleCancelProfile}
-                  className="bg-(--color-secondary) text-(--color-secondary-content) px-6 py-2 rounded font-semibold"
-                  disabled={isSavingProfile}
-                >
-                  Cancel
-                </button>
               </div>
             </div>
           </div>

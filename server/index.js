@@ -1,6 +1,5 @@
 import express from "express";
-import dotenv from "dotenv";
-dotenv.config();
+import cloudinary from "cloudinary";
 import cors from "cors";
 import morgan from "morgan";
 
@@ -37,4 +36,14 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log("server started on port", port);
   connectDB();
+  // try {
+  //   const result = await cloudinary.api.ping();
+  //   console.log("Cloudinary Connected:");
+
+  //   console.log(result);
+
+  // } catch (error) {
+  //   console.log(error.message);
+  //   process.exit(1);
+  // }
 });
