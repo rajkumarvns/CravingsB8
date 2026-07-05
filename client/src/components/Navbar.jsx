@@ -4,10 +4,12 @@ import { FaPowerOff } from "react-icons/fa";
 import logoLight from "../assets/transparentLogoLight.png";
 import api from "../config/api.config";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const { user, isLogin, role, setUser, setIsLogin, setRole } = useAuth();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   const handleNavigate = () => {
     if (role === "restaurant") {
@@ -49,7 +51,27 @@ const Navbar = () => {
       </div>
 
       {isLogin ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 border-0">
+          <div className="flex items-center gap-2">
+            <select
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              className="px-2 py-1 rounded"
+              title="Select Theme"
+              style={{
+                backgroundColor: "var(--color-base-200)",
+                color: "var(--color-base-content)",
+                border: "1px solid var(--color-base-300)",
+                minWidth: 110,
+              }}
+            >
+              <option value="light">Light</option>
+              <option value="coffee">Coffee</option>
+              <option value="mint">Mint</option>
+              <option value="sunset">Sunset</option>
+            </select>
+          </div>
+
           <button
             className="flex gap-2 items-center text-(--color-primary-content) border border-transparent hover:border-(--color-primary-content) px-3 py-1 rounded"
             title="Go to Dashboard"
@@ -57,7 +79,7 @@ const Navbar = () => {
           >
             {user?.photo && (
               <img
-                src={user.photo}
+                src={user.photo.url || user.photo}
                 alt={user?.fullName || "User"}
                 className="w-12 h-12 rounded-full object-cover object-top"
               />
@@ -79,6 +101,25 @@ const Navbar = () => {
         </div>
       ) : (
         <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <select
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              className="px-2 py-1 rounded"
+              title="Select Theme"
+              style={{
+                backgroundColor: "var(--color-base-200)",
+                color: "var(--color-base-content)",
+                border: "1px solid var(--color-base-300)",
+                minWidth: 110,
+              }}
+            >
+              <option value="light">Light</option>
+              <option value="coffee">Coffee</option>
+              <option value="mint">Mint</option>
+              <option value="sunset">Sunset</option>
+            </select>
+          </div>
           <Link
             to="/login"
             className="text-(--color-primary-content) border border-transparent hover:border-(--color-primary-content) px-3 py-1 rounded"

@@ -53,7 +53,7 @@ const Login = () => {
 
       // Save User in Session Storage
       sessionStorage.setItem(
-        "UserData",
+        "cravingUser",
         JSON.stringify(res.data.data)
       );
 

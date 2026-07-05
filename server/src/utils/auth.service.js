@@ -6,6 +6,10 @@ export const getToken = async (user, res) => {
       id: user._id,
     };
 
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not set in environment variables");
+    }
+
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });

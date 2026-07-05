@@ -35,7 +35,9 @@ export const RegisterUser = async (req, res, next) => {
       phone,
       gender,
       dob,
-      photo,
+      photo: {
+        url: photoURL,
+      },
     });
 
     // console.log(newUser);
@@ -43,7 +45,7 @@ export const RegisterUser = async (req, res, next) => {
     res.status(201).json({ message: "User Created Successfully" });
   } catch (error) {
     console.log(error.message);
-    next();
+    next(error);
   }
 };
 
@@ -78,7 +80,7 @@ export const LoginUser = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error.message);
-    next();
+    next(error);
   }
 };
 
@@ -88,6 +90,6 @@ export const LogoutUser = async (req, res, next) => {
     res.status(200).json({message:"Logout Successfully"})
   } catch (error) {
     console.log(error.message);
-    next();
+    next(error);
   }
 };

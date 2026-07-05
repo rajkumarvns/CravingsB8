@@ -4,6 +4,11 @@ import User from "../models/user.model.js";
 
 export const AuthProtect = async (req, res, next) => {
   try {
+    if (!process.env.JWT_SECRET) {
+      const error = new Error("JWT_SECRET is not set in environment variables");
+      error.statusCode = 500;
+      return next(error);
+    }
     const token = req.cookies.Oreo;
     if (!token) {
       const error = new Error("Session Expired");

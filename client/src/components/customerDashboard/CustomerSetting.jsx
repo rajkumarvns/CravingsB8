@@ -13,11 +13,13 @@ const CustomerSetting = () => {
     fullName: user?.fullName || "",
     email: user?.email || "",
     phone: user?.phone || "",
-    photo: user?.photo || "https://via.placeholder.com/150",
+    photo: user?.photo?.url || user?.photo || "https://via.placeholder.com/150",
   });
+
   const [editingProfile, setEditingProfile] = useState(false);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
-  const [profilePic, setProfilePic] = useState(null);
+  const [profilePicFile, setProfilePicFile] = useState(null);
+
   const [formData, setFormData] = useState({
     fullName: user?.fullName || "",
     email: user?.email || "",
@@ -32,7 +34,7 @@ const CustomerSetting = () => {
         fullName: user.fullName || "",
         email: user.email || "",
         phone: user.phone || "",
-        photo: user.photo || "https://via.placeholder.com/150",
+        photo: user.photo?.url || user.photo || "https://via.placeholder.com/150",
       });
       setFormData({
         fullName: user.fullName || "",
@@ -48,40 +50,6 @@ const CustomerSetting = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSaveProfile = async () => {
-    try {
-      setIsSavingProfile(true);
-
-      const payload = new FormData();
-
-      payload.append("fullName", formData.fullName);
-      payload.append("email", formData.email);
-      payload.append("phone", formData.phone);
-
-      payload.append("displayPic", profilePic);
-
-      const response = await api.put(`/user/edit-profile`, payload);
-
-      const updatedUser = response.data.data;
-      setProfileData({
-        fullName: updatedUser.fullName || "",
-        email: updatedUser.email || "",
-        phone: updatedUser.phone || "",
-        photo: updatedUser.photo || "https://via.placeholder.com/150",
-      });
-
-      setUser(updatedUser);
-      sessionStorage.setItem("cravingUser", JSON.stringify(updatedUser));
-
-      setEditingProfile(false);
-      toast.success("Profile updated successfully!");
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to update profile");
-    } finally {
-      setIsSavingProfile(false);
-    }
-  };
-
   const handleCancelProfile = () => {
     setFormData({
       fullName: profileData.fullName,
@@ -90,11 +58,51 @@ const CustomerSetting = () => {
     });
     setEditingProfile(false);
   };
+
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+    const fileURL = URL.createObjectURL(file);
+    setProfilePicPreview(fileURL);
+    setProfilePicFile(file);
+  };
 
-    setProfilePicPreview(URL.createObjectURL(file));
-    setProfilePic(file);
+  // Save profile including image (if selected)
+  const handleSaveProfile = async () => {
+    try {
+      setIsSavingProfile(true);
+
+      const formPayload = new FormData();
+      formPayload.append("fullName", formData.fullName);
+      formPayload.append("email", formData.email.toLowerCase());
+      formPayload.append("phone", formData.phone);
+      if (profilePicFile) {
+        formPayload.append("displayPic", profilePicFile);
+      }
+
+      const response = await api.put(`/user/edit-profile`, formPayload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const updatedUser = response.data.data;
+      setProfileData({
+        fullName: updatedUser.fullName || "",
+        email: updatedUser.email || "",
+        phone: updatedUser.phone || "",
+        photo: updatedUser.photo?.url || updatedUser.photo || "https://via.placeholder.com/150",
+      });
+
+      setUser(updatedUser);
+      sessionStorage.setItem("cravingUser", JSON.stringify(updatedUser));
+
+      setEditingProfile(false);
+      setProfilePicFile(null);
+      toast.success("Profile updated successfully!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update profile");
+    } finally {
+      setIsSavingProfile(false);
+    }
   };
 
   return (
@@ -103,55 +111,61 @@ const CustomerSetting = () => {
       <div className="bg-(--color-base-200) rounded-lg p-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Profile Information</h3>
-          <div className="flex gap-2 justify-end"></div>
-          {!editingProfile && (
+          {!editingProfile ? (
             <button
               onClick={() => setEditingProfile(true)}
               className="flex items-center gap-2 bg-(--color-primary) text-(--color-primary-content) px-3 py-1 rounded text-sm"
             >
               <MdEdit /> Edit
             </button>
+          ) : (
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={handleSaveProfile}
+                className="flex items-center gap-2 bg-(--color-primary) text-(--color-primary-content) px-3 py-1 rounded text-sm"
+                disabled={isSavingProfile}
+              >
+                {isSavingProfile ? "Saving..." : "Save Changes"}
+              </button>
+              <button
+                onClick={handleCancelProfile}
+                className="flex items-center gap-2 bg-(--color-secondary) text-(--color-secondary-content) px-3 py-1 rounded text-sm"
+                disabled={isSavingProfile}
+              >
+                Cancel
+              </button>
+            </div>
           )}
         </div>
-
-        {!editingProfile ? (
-          <div>
-            <div className="flex items-center gap-6">
-              <div className="relative">
+        <div>
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <div className="w-36 h-36">
                 <img
-                  src={profileData.photo}
+                  src={profilePicPreview || profileData.photo}
                   alt="Profile"
-                  className="w-32 h-32 rounded-full object-cover border-2 border-(--color-primary)"
+                  className="w-full h-full rounded-full object-cover border-2 border-(--color-primary)"
                 />
               </div>
-              <div className="space-y-3">
-                <div className="flex items-center gap-4">
-                  <p className="text-sm text-(--color-neutral)">Name</p>
-                  <p className="font-semibold">{profileData.fullName}</p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <p className="text-sm text-(--color-neutral)">Email</p>
-                  <p className="font-semibold">{profileData.email}</p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <p className="text-sm text-(--color-neutral)">Phone</p>
-                  <p className="font-semibold">{profileData.phone}</p>
-                </div>
+              <div
+                className="absolute cursor-pointer bottom-1 right-1 border p-2 rounded-full w-fit bg-(--color-base-200)"
+                title="Change Photo"
+              >
+                <label htmlFor="profilePic" className="cursor-pointer">
+                  <MdOutlineAddAPhoto className="text-xl" />
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="profilePic"
+                  id="profilePic"
+                  className="hidden"
+                  onChange={handleProfilePicChange}
+                />
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="flex items-start gap-6">
-            <div className="relative w-36 h-36 shrink-0">
-              <img
-                src={profileData.photo}
-                alt="Profile"
-                className="w-36 h-36 rounded-full object-cover border-2 border-(--color-primary)"
-              />
-            </div>
-
             <div className="space-y-4 w-full">
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-5 gap-2 justify-center items-center">
                 <label className="block text-sm font-semibold mb-2">
                   Full Name
                 </label>
@@ -160,10 +174,12 @@ const CustomerSetting = () => {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleProfileChange}
-                  className="w-full px-3 py-2 border border-(--color-secondary) rounded col-span-4"
+                  className={`w-full px-3 py-2 border ${editingProfile ? "border-(--color-secondary)" : "border-transparent"} rounded col-span-4`}
+                  disabled={!editingProfile}
                 />
 
                 <label className="block text-sm font-semibold mb-2">
+                  {" "}
                   Email
                 </label>
                 <input
@@ -171,7 +187,8 @@ const CustomerSetting = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleProfileChange}
-                  className="w-full px-3 py-2 border border-(--color-secondary) rounded col-span-4"
+                  className={`w-full px-3 py-2 border ${editingProfile ? "border-(--color-secondary)" : "border-transparent"} rounded col-span-4`}
+                  disabled={!editingProfile}
                 />
 
                 <label className="block text-sm font-semibold mb-2">
@@ -182,12 +199,13 @@ const CustomerSetting = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleProfileChange}
-                  className="w-full px-3 py-2 border border-(--color-secondary) rounded col-span-4"
+                  className={`w-full px-3 py-2 border ${editingProfile ? "border-(--color-secondary)" : "border-transparent"} rounded col-span-4`}
+                  disabled={!editingProfile}
                 />
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
