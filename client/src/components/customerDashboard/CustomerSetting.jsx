@@ -34,7 +34,8 @@ const CustomerSetting = () => {
         fullName: user.fullName || "",
         email: user.email || "",
         phone: user.phone || "",
-        photo: user.photo?.url || user.photo || "https://via.placeholder.com/150",
+        photo:
+          user.photo?.url || user.photo || "https://via.placeholder.com/150",
       });
       setFormData({
         fullName: user.fullName || "",
@@ -89,7 +90,10 @@ const CustomerSetting = () => {
         fullName: updatedUser.fullName || "",
         email: updatedUser.email || "",
         phone: updatedUser.phone || "",
-        photo: updatedUser.photo?.url || updatedUser.photo || "https://via.placeholder.com/150",
+        photo:
+          updatedUser.photo?.url ||
+          updatedUser.photo ||
+          "https://via.placeholder.com/150",
       });
 
       setUser(updatedUser);

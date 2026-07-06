@@ -37,13 +37,21 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       <div className="h-full flex flex-col">
         <div className="flex items-center gap-3 p-3">
           <img
-            src={user?.photo?.url || user?.photo || "https://via.placeholder.com/48"}
+            src={
+              user?.photo?.url ||
+              user?.photo ||
+              "https://via.placeholder.com/48"
+            }
             alt="avatar"
             className="w-12 h-12 rounded-full object-cover border"
           />
           <div>
-            <div className="font-semibold text-sm">{user?.fullName || "Guest"}</div>
-            <div className="text-xs text-(--color-neutral)">{user?.email || ""}</div>
+            <div className="font-semibold text-sm">
+              {user?.fullName || "Guest"}
+            </div>
+            <div className="text-xs text-(--color-neutral)">
+              {user?.email || ""}
+            </div>
           </div>
         </div>
         <ul className="space-y-4 flex-1">
