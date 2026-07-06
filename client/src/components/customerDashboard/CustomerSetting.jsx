@@ -191,8 +191,9 @@ const CustomerSetting = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleProfileChange}
-                  className={`w-full px-3 py-2 border ${editingProfile ? "border-(--color-secondary)" : "border-transparent"} rounded col-span-4`}
-                  disabled={!editingProfile}
+                  // disabled = {true}
+                  className={`w-full cursor-not-allowed   px-3 py-2 border ${editingProfile ? "border-(--color-secondary) bg-(--color-neutral) opacity-50" : "border-transparent"} rounded col-span-4`}
+                  disabled={true}
                 />
 
                 <label className="block text-sm font-semibold mb-2">
