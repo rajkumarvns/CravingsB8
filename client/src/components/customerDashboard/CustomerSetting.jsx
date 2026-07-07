@@ -151,22 +151,25 @@ const CustomerSetting = () => {
                   className="w-full h-full rounded-full object-cover border-2 border-(--color-primary)"
                 />
               </div>
-              <div
-                className="absolute cursor-pointer bottom-1 right-1 border p-2 rounded-full w-fit bg-(--color-base-200)"
-                title="Change Photo"
-              >
-                <label htmlFor="profilePic" className="cursor-pointer">
-                  <MdOutlineAddAPhoto className="text-xl" />
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  name="profilePic"
-                  id="profilePic"
-                  className="hidden"
-                  onChange={handleProfilePicChange}
-                />
-              </div>
+              {editingProfile && (
+                <div
+                  className="absolute cursor-pointer bottom-1 right-1 border p-2 rounded-full w-fit bg-(--color-base-200)"
+                  title="Change Photo"
+                >
+                  <label htmlFor="profilePic" className="cursor-pointer">
+                    <MdOutlineAddAPhoto className="text-xl" />
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="profilePic"
+                    id="profilePic"
+                    className="hidden"
+                    onChange={handleProfilePicChange}
+                  />
+                </div>
+              )}
+              ;
             </div>
             <div className="space-y-4 w-full">
               <div className="grid grid-cols-5 gap-2 justify-center items-center">
