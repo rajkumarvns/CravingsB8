@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const mongoUri = (process.env.MONGO_DB_URI || "mongodb://localhost:27017/cravingsB8_DB").replace(/;$/, "");
-    const conn = await mongoose.connect(mongoUri);
-    console.log("Mongo DB connected successfully");
+    const conn = await mongoose.connect(process.env.MONGO_DB_URI);
+    console.log("Mongo DB connected Successfully");
     console.log("DB Host :", conn.connection.host);
     console.log("DB Name :", conn.connection.name);
   } catch (error) {
@@ -12,4 +11,5 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
+
 export default connectDB;

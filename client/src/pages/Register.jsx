@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import api from "../config/api.config";
+import api from "../config/ApiConfig";
 
 const Register = () => {
   const userType = useParams().userType; // Get userType from URL params (if needed)
@@ -17,6 +17,7 @@ const Register = () => {
     confirmPassword: "",
     agreeTerms: false,
   });
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -37,6 +38,7 @@ const Register = () => {
 
   const validateForm = (data) => {
     const newErrors = {};
+
     if (!data.fullName.trim()) newErrors.fullName = "Full name is required";
     if (!data.email.trim()) newErrors.email = "Email is required";
     if (!data.phone.trim()) newErrors.phone = "Phone number is required";
@@ -50,6 +52,7 @@ const Register = () => {
       newErrors.confirmPassword = "Passwords do not match";
     if (!data.agreeTerms)
       newErrors.agreeTerms = "You must agree to terms and conditions";
+
     return newErrors;
   };
 
@@ -58,11 +61,13 @@ const Register = () => {
     setErrors({});
     setLoading(true);
     const validationErrors = validateForm(formData);
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setLoading(false);
       return;
     }
+
     console.log("Form submitted:", formData);
 
     try {
@@ -84,8 +89,8 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-[url('/foodTable.webp')] bg-cover bg-center p-8 flex items-center justify-end">
-      <div className="bg-white/95 rounded-lg shadow-md px-8 py-6 max-w-130 w-full overflow-y-auto max-h-[calc(100vh-4.5rem)]">
+    <div className="h-[90vh] bg-[url('/foodTable.webp')] flex items-center justify-end bg-cover bg-center p-10 md:pe-30">
+      <div className="bg-white rounded-lg shadow-md px-10 py-6 max-w-md w-full overflow-y-auto max-h-[85vh]">
         <h1 className="text-3xl font-bold text-(--color-primary) mb-2 text-center">
           Create Account
         </h1>
@@ -145,6 +150,7 @@ const Register = () => {
 
           {/* Email */}
           <div className="mb-4">
+            
             <input
               type="email"
               name="email"
@@ -166,6 +172,7 @@ const Register = () => {
 
           {/* Phone */}
           <div className="mb-4">
+           
             <input
               type="number"
               name="phone"
@@ -231,6 +238,7 @@ const Register = () => {
 
           {/* Password */}
           <div className="mb-4">
+          
             <input
               type="password"
               name="password"
@@ -251,9 +259,9 @@ const Register = () => {
           </div>
 
           {/* Confirm Password */}
-          <div className="mb-4">
+          <div className="mb-6">
             <input
-              type="password"
+              type="text"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleInputChange}
@@ -270,8 +278,7 @@ const Register = () => {
               </span>
             )}
           </div>
-
-          <div className="mb-4">
+          <div className="mb-6">
             <label className="flex items-start gap-2 cursor-pointer text-(--color-secondary)">
               <input
                 type="checkbox"
@@ -292,14 +299,15 @@ const Register = () => {
                 {errors.agreeTerms}
               </span>
             )}
-            {/* Register Button */}
-            <button
-              type="submit"
-              className="w-full mt-3 py-3 bg-(--color-primary) text-white font-semibold rounded-md hover:bg-orange-700 transition-colors duration-300"
-            >
-              {loading ? "Registering..." : "Register"}
-            </button>
           </div>
+
+          {/* Register Button */}
+          <button
+            type="submit"
+            className="w-full py-3 bg-(--color-primary) text-white font-semibold rounded-md hover:bg-orange-700 transition-colors duration-300 mb-4"
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
         </form>
 
         {/* Login Link */}

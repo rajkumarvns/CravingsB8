@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     setIsLogin(!!user);
     setRole(user ? user.userType : null);
   }, [user]);
+
   const value = { user, isLogin, role, setUser, setIsLogin, setRole };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

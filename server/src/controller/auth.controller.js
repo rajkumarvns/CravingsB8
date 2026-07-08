@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import {getToken }from "../utils/auth.service.js";
+import { genToken } from "../utils/auth.service.js";
 
 export const RegisterUser = async (req, res, next) => {
   try {
@@ -12,21 +12,21 @@ export const RegisterUser = async (req, res, next) => {
       return next(error);
     }
 
-    // console.log(req.body);
-
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      const error = new Error("Email already registered");
+      const error = new Error("Email already registred");
       error.statusCode = 409;
       return next(error);
     }
 
     const photoURL = `https://placehold.co/600x400?text=${fullName.charAt(0).toUpperCase()}`;
-    
+
+    const photo = {
+      url: photoURL,
+      publicId: null,
+    };
     const SALT = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, SALT);
-
-    // console.log("addnig user now");
 
     const newUser = await User.create({
       fullName,
@@ -35,17 +35,13 @@ export const RegisterUser = async (req, res, next) => {
       phone,
       gender,
       dob,
-      photo: {
-        url: photoURL,
-      },
+      photo,
     });
-
-    // console.log(newUser);
 
     res.status(201).json({ message: "User Created Successfully" });
   } catch (error) {
     console.log(error.message);
-    next(error);
+    next();
   }
 };
 
@@ -61,7 +57,7 @@ export const LoginUser = async (req, res, next) => {
 
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      const error = new Error("Email not registered");
+      const error = new Error("Email not registred");
       error.statusCode = 404;
       return next(error);
     }
@@ -72,7 +68,8 @@ export const LoginUser = async (req, res, next) => {
       error.statusCode = 401;
       return next(error);
     }
-      await getToken (existingUser,res);
+
+    await genToken(existingUser, res);
 
     res.status(200).json({
       message: "Welcome Back",
@@ -80,16 +77,17 @@ export const LoginUser = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error.message);
-    next(error);
+    next();
   }
 };
 
 export const LogoutUser = async (req, res, next) => {
   try {
-    res.clearCookie("Oreo",{maxAge: 0});
-    res.status(200).json({message:"Logout Successfully"})
+    res.clearCookie("Oreo", { maxAge: 0 });
+
+    res.status(200).json({ message: "Logout Sucessfully" });
   } catch (error) {
     console.log(error.message);
-    next(error);
+    next();
   }
 };

@@ -28,7 +28,10 @@ const UserSchema = mongoose.Schema(
       required: true,
     },
     photo: {
-      url: { type: String, required: true },
+      url: {
+        type: String,
+        required: true,
+      },
       publicId: {
         type: String,
       },
