@@ -59,15 +59,12 @@ const Login = () => {
       setIsLogin(true);
       //console.log(res.data.data.userType);
       setRole(res.data.data.userType);
-      if (res.data.data.userType === "restaurant") {
+      res.data.data.userType === "restaurant" &&
         navigate("/restaurant-dashboard");
-      } else if (res.data.data.userType === "rider") {
-        navigate("/rider-dashboard");
-      } else if (res.data.data.userType === "admin") {
-        navigate("/admin-dashboard");
-      } else {
+      res.data.data.userType === "rider" && navigate("/rider-dashboard");
+      res.data.data.userType === "admin" &&
+        navigate("/admin-dashboard") &&
         navigate("/customer-dashboard");
-      }
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
