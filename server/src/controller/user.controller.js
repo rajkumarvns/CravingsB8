@@ -35,7 +35,7 @@ export const EditUserProfile = async (req, res, next) => {
       // console.log(dataURI.slice(0, 100));
 
       const result = await cloudinary.uploader.upload(dataURI, {
-        folder: "Cravings678/profile",
+        folder: "CravingsFSD8/profile",
         width: 500,
         height: 500,
         crop: "fill",
